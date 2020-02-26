@@ -245,8 +245,8 @@ const init = async (): Promise<void> => {
     });
   });
 
-  app.listen(3000, () => {
-    console.log('listening on 3000');
+  app.listen(env.port, () => {
+    console.log(`listening on ${env.port}`);
   });
 };
 
