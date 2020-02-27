@@ -69,11 +69,11 @@ const init = async (): Promise<void> => {
     const channelId = req.params.channelId;
     getChannelsList(channelId).then(youtubeChannels => {
       const item = youtubeChannels.data.items[0];
-      download(item.snippet.thumbnails.medium.url, path.resolve(__dirname, 'public', 'img', item.id + '.png'));
+      download(item.snippet.thumbnails.medium.url, path.resolve(__dirname, 'public', 'img', channelId + '.png'));
       channelDB.update(
-        { channelId: item.id } as ChannelDBScheme,
+        { channelId } as ChannelDBScheme,
         {
-          channelId: item.id,
+          channelId,
           channelName: item.snippet.title,
         } as ChannelDBScheme,
         { upsert: true }
@@ -184,7 +184,7 @@ const init = async (): Promise<void> => {
   });
 
   // cron
-  cron.schedule('0,15,30,45 * * * *', () => {
+  cron.schedule('0 * * * *', () => {
     db.find({}, (err: any, docs: DBScheme[]) => {
       if (err) {
         console.log(err);
