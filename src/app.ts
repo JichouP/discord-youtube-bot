@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import cron from 'node-cron';
 import { getChannelsList, getSearchList, getVideosList } from './utils/youtube';
 import download from './utils/download';
+import * as traq from './utils/traq';
 
 dotenv.config();
 
@@ -228,7 +229,19 @@ const init = async (): Promise<void> => {
                             hour: 'numeric',
                             minute: 'numeric',
                           }
-                        )}\nhttps://www.youtube.com/watch?v=${videoId}`
+                        )}から\nhttps://www.youtube.com/watch?v=${videoId}`
+                      );
+                      traq.postMessage(
+                        `[${searchItem.snippet.title}](https://www.youtube.com/watch?v=${videoId})\n${new Date(
+                          scheduledStartTime
+                        ).toLocaleString('ja-JP', {
+                          weekday: 'short',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}から`
                       );
                     })
                     .catch(err => {
